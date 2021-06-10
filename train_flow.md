@@ -2,7 +2,7 @@
 
 ## Initialization:
 
-(a) Loading the data:
+### (a) Loading the data:
 ```bash
 train_loader = get_dataloader(parameters)
 ```
@@ -10,7 +10,7 @@ train_loader = get_dataloader(parameters)
 - This calls data_loader/_init_.py, which further calls data_loader/dataset.py for Imagedatset which augment the data as its resize,crop or horizontally flip 
 or can add noise for more generic model.
 
-(b) Setting up PAN loss:
+### (b) Setting up PAN loss:
 ```bash
 criterion = get_loss(config).cuda()
 ```
@@ -19,7 +19,7 @@ alpha=0.5, beta=0.25, delta_agg=0.5, delta_dis=3, ohem_ratio=3, reduction='mean'
 - This also setups up training masks, kernel coordinates, text coordinates which use to calculate loss for our text detection model
 
 
-(c) Setting up the Deep-Learning model:
+### (c) Setting up the Deep-Learning model:
 ```bash
 model = get_model(config)
 ```
@@ -36,3 +36,31 @@ All parameters are important for getting the best perfomance out of it as :
   - "FPN" - Computationally expensive but gives comparable perfomance to FPEM_FFM
 
 This calls models/model.py which sets up the whole model in pytorch framework
+
+### (d) Setting up of optimizer and other checkpoints, etc:\
+```bash
+trainer = Trainer(config=config,
+    model=model,
+    criterion=criterion,
+    train_loader=train_loader)
+```
+- Learning rate: To control learning rate decrement
+  - para: "lr_scheduler": {"type": "StepLR","args": {"step_size": 200,"gamma": 0.1}}
+- Optimizer: 
+  - para: {"type": "Adam"/"SGD","args": {"lr": 0.001,"weight_decay": 0,"amsgrad": true}}
+- Some other parameters:
+  - "epochs": 600,
+  - "display_interval": 10,
+  - "show_images_interval": 50,
+  - "resume_checkpoint": "",     
+  - "finetune_checkpoint": "",
+  - "output_dir": "output",
+  - "tensorboard": true,
+  - "metrics": "hmean"
+  
+## Training phase:
+```bash
+trainer.train()
+```
+This trains the model, and saves latest and best checkpoint after each epochs.
+
