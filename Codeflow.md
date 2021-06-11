@@ -1,30 +1,36 @@
 # Efficient and Accurate Arbitrary-Shaped Text Detection with Pixel Aggregation Network
 
-![](imgs/paper/PAN.jpg)
+<!-- ![](imgs/paper/PAN.jpg) -->
 
 ## Requirements
-* pytorch 1.1+
-* torchvision 0.3+
+* pytorch 1.4
+* torchvision 0.5
 * pyclipper
 * opencv3
 * gcc 4.9+
 
-## Download
+## Dataset 
 
-`PAN_resnet18_FPEM_FFM` and `PAN_resnet18_FPEM_FFM` on icdar2015：
+- ICDAR-2015 dataset [(download link)](https://rrc.cvc.uab.es/?ch=4&com=downloads)
+  - Train size: 1000 images, Test size: 500 images
+  - Dimension: 720 X 1280 X 3
+- Tote-Id dataset
+  - Train size: 300 images, Test size: 76 images
+  - Dimension:  1440 X 1920  X 3
 
-the updated model(resnet18:78.8,shufflenetv2: 72.4,lr:le-3) is not the best model
+## Data Preparation and preprocessing
 
-[google drive](https://drive.google.com/drive/folders/1bKPQEEOJ5kgSSRMpnDB8HIRecnD_s4bR?usp=sharing)
+To perform real scene text detection, we need good quality images as input and corresponding bounding box of the texts as output(text as well, if one need text recognition).\
 
-## Data Preparation
+For our custom Tote-Id dataset, we divide our image into 4 subimages 
 
-train: prepare a text in the following format, use '\t' as a separator
+### train: 
+prepare a text in the following format, use '\t' as a separator
 ```bash
 /path/to/img.jpg path/to/label.txt
 ...
 ```
-val:
+### val:
 use a folder
 ```bash
 img/ store img
@@ -32,6 +38,7 @@ gt/ store gt file
 ```
 
 ## Train
+For more information refer **train_flow.md**.
 1. config the `train_data_path`,`val_data_path`in [config.json](config.json)
 2. use following script to run
 ```sh
@@ -48,6 +55,8 @@ python3 train.py
 python3 eval.py
 ```
 
+This will produce the inference speed(in FPS) and corresponding precision, recall & F1-score.
+
 ## Predict 
 [predict.py](predict.py) is used to inference on single image
 
@@ -57,7 +66,6 @@ python3 eval.py
 python3 predict.py
 ```
 
-The project is still under development.
 
 <h2 id="Performance">Performance</h2>
 
@@ -79,22 +87,13 @@ only train on ICDAR2015 dataset
 | my (resnet50+FPN+pse扩张)  | 736 |1e-4|  78.96 | 76.27 | 77.59 | 10.67 (P100)|
 
 ### examples
-![](imgs/example/img_2.jpg)
-
-![](imgs/example/img_10.jpg)
 
 ![](imgs/example/img_29.jpg)
 
 ![](imgs/example/img_75.jpg)
 
-![](imgs/example/img_91.jpg)
 
-### todo
-- [ ] MobileNet backbone
-
-- [x] ShuffleNet backbone
 ### reference
 1. https://arxiv.org/pdf/1908.05900.pdf
 2. https://github.com/WenmuZhou/PSENet.pytorch
 
-**If this repository helps you，please star it. Thanks.**
