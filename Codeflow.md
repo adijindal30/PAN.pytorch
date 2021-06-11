@@ -76,21 +76,26 @@ python3 predict.py
 <h2 id="Performance">Performance</h2>
 
 ### [ICDAR 2015](http://rrc.cvc.uab.es/?ch=4)
-only train on ICDAR2015 dataset
 
-| Method                   | image size (short size) |learning rate | Precision (%) | Recall (%) | F-measure (%) | FPS |
-|:--------------------------:|:-------:|:--------:|:--------:|:------------:|:---------------:|:-----:|
-| paper(resnet18)  | 736 |x | x | x | 80.4 | 26.1 |
-| my (ShuffleNetV2+FPEM_FFM+pse扩张)  |736 |1e-3| 81.72 | 66.73 | 73.47 | 24.71 (P100)|
-| my (resnet18+FPEM_FFM+pse扩张)  |736 |1e-3| 84.93 | 74.09 | 79.14 | 21.31 (P100)|
-| my (resnet50+FPEM_FFM+pse扩张)  |736 |1e-3| 84.23 | 76.12 | 79.96 | 14.22 (P100)|
-| my (ShuffleNetV2+FPEM_FFM+pse扩张)  |736 |1e-4| 75.14 | 57.34 | 65.04 | 24.71 (P100)|
-| my (resnet18+FPEM_FFM+pse扩张)  |736 |1e-4| 83.89 | 69.23 | 75.86 | 21.31 (P100)|
-| my (resnet50+FPEM_FFM+pse扩张)  |736 |1e-4| 85.29 | 75.1 | 79.87 | 14.22 (P100)|
-| my (resnet18+FPN+pse扩张)  | 736 |1e-3|  76.50 | 74.70 | 75.59 | 14.47 (P100)|
-| my (resnet50+FPN+pse扩张)  | 736 |1e-3|  71.82 | 75.73 | 73.72 | 10.67 (P100)|
-| my (resnet18+FPN+pse扩张)  | 736 |1e-4|  74.19 | 72.34 | 73.25 | 14.47 (P100)|
-| my (resnet50+FPN+pse扩张)  | 736 |1e-4|  78.96 | 76.27 | 77.59 | 10.67 (P100)|
+
+| Backbone Model       | Train dataset | Image Dimension | Epoch | Batch Size | Pretrained weights| Test dataset   | F1       | Precision | Recall   | FPS   |
+| -------------------- | ---------------------------------------- | --------------- | ----- | ---------- | ------------------------------------ | ----------------- | -------- | --------- | -------- | ----- |
+| Mobilenetv2/FPEM     | ICDAR-1000                               | 640             | 45    | 4          | yes/Imagenet                         | ICDAR-500(Test)   | 0.19     | 0.38      | 0.13     | 11    |
+| Renset 18            | ICDAR-1000                               | 640             | 200+  | 4          | yes/Imagenet                         | ICDAR-500(Test)   | 0.78     | 0.85      | 0.73     | 13.25 |
+| shufflenetv2         | ICDAR-1000                               | 640             | 200+  | 4          | yes/Imagenet                         | ICDAR-500(Test)   | 0.72     | 0.79      | 0.67     | 16.84 |
+| densenet121          | ICDAR-1000                               | 512             | 40+   | 4          | yes/Imagenet                         | ICDAR-500(Test)   | 0.5      | 0.619     | 0.402    | 3     |
+| squeezenet1\_1       | ICDAR-250                                | 512             | <20   | 4          | No                                   | ICDAR-500(Test)   | \-       |           |          | 6     |
+| shufflenetv2(fpem=1) | ICDAR-250                                | 512             | <20   | 4          | yes/Imagenet                         | ICDAR-500(Test)   | \-       |           |          | 19-20 |
+| resnet18(fpem=1)     | ICDAR-250                                | 640             | <20   | 4          | yes/Imagenet                         | ICDAR-500(Test)   |          |           |          | 16.87 |
+| Mobilenetv2/FPEM=1   | ICDAR-1000                               | 640             | 45    | 4          | yes/Imagenet                         | ICDAR-500(Test)   | 0.458438 | 0.66      | 0.34     | 15    |
+| squeezenet1\_0       | ICDAR-250                                | 512             |       | 4          | yes/Imagenet                         |                   |          |           |          |       |
+| Resnetxt             |                                          |                 |       | 4          |                                      |                   |          |           |          |       |
+
+
+### [Tote-Id dataset]()
+| Backbone Model       | Train dataset | Image Dimension | Epoch | Batch Size | Pretrained weights| Test dataset   | F1       | Precision | Recall   | FPS   |
+| -------------------- | ---------------------------------------- | --------------- | ----- | ---------- | ------------------------------------ | ----------------- | -------- | --------- | -------- | ----- |
+| shufflenetv2(fpem=0) | Tote-id Datset-1058                      | 640             | 15    | 4          | Yes/Imagenet                         | Tote-id Datset-56 | 0.325517 | 0.442362  | 0.257501 | 9     |
 
 ### examples
 
@@ -102,4 +107,6 @@ only train on ICDAR2015 dataset
 ### reference
 1. https://arxiv.org/pdf/1908.05900.pdf
 2. https://github.com/WenmuZhou/PSENet.pytorch
+3. https://pytorch.org/vision/stable/models.html
+4. https://github.com/WenmuZhou/PAN.pytorch
 
