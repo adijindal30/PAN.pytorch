@@ -21,25 +21,31 @@
 ## Data Preparation and preprocessing
 
 To perform real scene text detection, we need good quality images as input and corresponding bounding box of the texts as output(text as well, if one need text recognition).\
+The bounding box should have the coordinate in the following manner: x1, y1, x2, y2, x3, y3, x4, y4,a.
 
-For our custom Tote-Id dataset, we divide our image into 4 subimages 
+In preprocessing step, for our custom Tote-Id dataset, we divide the image into 4 subimages(with 100 pixels overlap), and so we divide the bounding box correspondingly.
 
 ### train: 
-prepare a text in the following format, use '\t' as a separator
+prepare a <em>dataset.txt</em> file in the following format, use '\t' as a separator
 ```bash
-/path/to/img.jpg path/to/label.txt
+/path/to/img_1.jpg path/to/label_1.txt
+/path/to/img_2.jpg path/to/label_2.txt
+/path/to/img_3.jpg path/to/label_3.txt
 ...
 ```
+
+
 ### val:
-use a folder
+use a folder contains
 ```bash
 img/ store img
 gt/ store gt file
 ```
 
+
 ## Train
 For more information refer **train_flow.md**.
-1. config the `train_data_path`,`val_data_path`in [config.json](config.json)
+1. config the `train_data_path/dataset.txt`,`val_data_path`(contains img and gt folder)in [config.json](config.json)
 2. use following script to run
 ```sh
 python3 train.py
